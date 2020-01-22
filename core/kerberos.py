@@ -1,10 +1,6 @@
 import os
 import uuid
 
-from common.font import *
-from common.decorator import method_decorator
-from common.decorator import function_decorator
-
 class Kerberos:
     __id=''
 

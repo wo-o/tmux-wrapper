@@ -1,0 +1,19 @@
+#!/Users/kakao/.pyenv/shims/python
+import os
+import sys
+import argparse
+
+from option.option import Option
+from option.tmux import TmuxOption
+from option.ansible import AnsibleOption
+
+if __name__=="__main__" :
+    
+    try :
+        args = Option.get_args()
+        if args.command == 'tmux': 
+            TmuxOption.handler(args)
+        if args.command == 'ansible': 
+            AnsibleOption.handler(args)
+
+    except KeyboardInterrupt: sys.exit(0)

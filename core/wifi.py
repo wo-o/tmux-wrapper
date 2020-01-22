@@ -3,9 +3,6 @@ import time
 import functools
 import subprocess
 
-from common.font import *
-from common.decorator import method_decorator
-
 print = functools.partial(print, flush=True)
 
 class Wifi:

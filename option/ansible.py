@@ -4,12 +4,13 @@ from core.tmux import Tmux
 from core.target import Target
 from core.kerberos import Kerberos
 
-class TmuxOption :
+class AnsibleOption :
 
     @classmethod
     def handler(cls, args) :
         target_list = cls.get_target_list(args)
-        cls.execute_tmux_with_ssh(args, target_list)
+        print(target_list)
+        # cls.execute_tmux_with_ssh(args, target_list)
 
     @classmethod
     def get_target_list(cls, args) :

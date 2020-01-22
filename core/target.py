@@ -6,9 +6,6 @@ import requests
 import json
 import sys
 
-# from common.font import *
-from common.decorator import method_decorator
-from common.decorator import function_decorator
 from common.dialogue import Dialogue as Dialog
 
 class Target:
@@ -34,85 +31,37 @@ class Target:
         start = int(suffix)
         end = Dialog.get_range(int(start))
 
-        target = list()
+        target_list = list()
         for i in range (start, end+1):
-            target.append(prefix + str(i).zfill(len(suffix)))
+            target_list.append(prefix + str(i).zfill(len(suffix)))
 
-        return target
-
-    @staticmethod
-    def parse_by_space():
-        @function_decorator
-        def set_hostlist():
-            hostlist= input('Type hostlist seperated by blank\n=> ')
-            if not hostlist: 
-                set_hostlist()
-            return hostlist
-        hostlist = set_hostlist()
-
-        return hostlist.split()
+        return target_list
 
     @staticmethod
-    def parse_by_comma():
-        @function_decorator
-        def set_hostlist():
-            hostlist= input('Type hostlist seperated by comma\n=> ')
-            if not hostlist: 
-                set_hostlist()
-            return hostlist
-        hostlist = set_hostlist()
-
-        return hostlist.split(',')
+    def parse_by_seperator(seperator_symbol, seperator):
+        targets = Dialog.get_targets_for_seperator(seperator)
+        return targets.split(seperator_symbol)
 
     @classmethod
     def parse_by_file(cls):
-        @function_decorator
-        def set_filename():
-            filename = input('Type filename with path : ')
-            if not filename: 
-                return set_filename()
-            return filename
-        filename = set_filename()
-
+        file_name = Dialog.get_file_name()
         try:
-            f = open(filename, 'r')
-            hostlist = f.read().split('\n')
+            f = open(file_name, 'r')
+            target_list = f.read().split('\n')
             f.close()
-            hostlist = list(filter(lambda x:x!='',hostlist))
-            return hostlist
-        except:
-            print(FAIL + 'Cannot find the file' + END)
-            return cls.set_hostlist_by_file()
-    
-    @staticmethod
-    def print_menu():
-        choices = [
-            'Range', 
-            'Space', 
-            'Comma', 
-            'File',
-            'Domain'
-        ]
-        selector = [
-            inquirer.List(
-                'method',
-                message = "Choose method to make access list",
-                choices = choices
-            ),
-        ]
-
-        return inquirer.prompt(selector)
+            target_list = list(filter(lambda x:x!='',target_list))
+            return target_list
+        except FileNotFoundError:
+            Dialog.get_file_failed()
+            sys.exit(0)
     
     @classmethod
     def select_parse_method(cls):
         try :
-            selector = None
-            while not selector :
-                selector = cls.print_menu()['method']
-        except TypeError :
-            sys.exit(0)
+            method = Dialog.get_method_to_parse()
+            if method == 'Comma'  : return cls.parse_by_seperator(' ', 'Comma')
+            if method == 'File'   : return cls.parse_by_file()
+            if method == 'Range'  : return cls.parse_by_range()
+            if method == 'Space'  : return cls.parse_by_seperator(' ', 'Space')
+        except TypeError: sys.exit(0)
 
-        if selector == 'Range'  : return cls.parse_by_range()
-        if selector == 'Space'  : return cls.parse_by_space()
-        if selector == 'Comma'  : return cls.parse_by_comma()
-        if selector == 'File'   : return cls.parse_by_file()
