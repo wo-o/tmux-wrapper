@@ -61,8 +61,9 @@ class Target:
         try:
             target_list = list()
             while True:
-                i = input()
-                if i == '': break;
+                i = (input()).split(' ')[0].strip()
+                if i == '': continue
+                if i == 'done': break
                 target_list.append(i)
             Dialog.end_textarea()
             return target_list

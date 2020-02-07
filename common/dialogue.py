@@ -50,7 +50,7 @@ class Dialogue :
 
     @staticmethod
     def end_textarea() :
-        print(f'{Fore.GREEN}{"="*30}')
+        print(f'{Fore.GREEN}\n{"="*30}')
 
     @staticmethod
     def get_textarea_failed() :

@@ -62,6 +62,11 @@ class Option :
             type=str, nargs=1, metavar=('User'), 
             help='Type user to connect'
         ) 
+        parser.add_argument (
+            '-x', '--execute', 
+            action="store_true",
+            help='Type command to execute'
+        ) 
 
     # @classmethod
     # def wifi_option(cls) :

@@ -1,4 +1,8 @@
 import argparse
+import os
+
+from colorama import Fore, Back, Style, init
+init(autoreset=True)
 
 from core.tmux import Tmux
 from core.target import Target
@@ -9,7 +13,13 @@ class TmuxOption :
     @classmethod
     def handler(cls, args) :
         target_list = cls.get_target_list(args)
-        cls.execute_tmux_with_ssh(args, target_list)
+        if args.execute : 
+            command = input(f'{Fore.GREEN}\n Type command to execute\n $ {Fore.RESET}')
+            for target in target_list:
+                print(f'{Fore.GREEN}\n{"="*20} {target}')
+                os.system(f'ssh root@{target} ' + command)
+                print(f'{Fore.GREEN}{"="*50}\n')
+        else : cls.execute_tmux_with_ssh(args, target_list)
 
     @classmethod
     def get_target_list(cls, args) :
