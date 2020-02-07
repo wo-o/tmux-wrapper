@@ -56,6 +56,21 @@ class Target:
             sys.exit(0)
     
     @classmethod
+    def parse_by_textarea(cls):
+        Dialog.start_textarea()
+        try:
+            target_list = list()
+            while True:
+                i = input()
+                if i == '': break;
+                target_list.append(i)
+            Dialog.end_textarea()
+            return target_list
+        except FileNotFoundError:
+            Dialog.get_file_failed()
+            sys.exit(0)
+
+    @classmethod
     def select_parse_method(cls):
         try :
             method = Dialog.get_method_to_parse()
@@ -63,5 +78,6 @@ class Target:
             if method == 'File'   : return cls.parse_by_file()
             if method == 'Range'  : return cls.parse_by_range()
             if method == 'Space'  : return cls.parse_by_seperator(' ', 'Space')
+            if method == 'Textarea'  : return cls.parse_by_textarea()
         except TypeError: sys.exit(0)
 

@@ -44,16 +44,27 @@ class Dialogue :
     def get_file_failed() :
         print(f'{Fore.RED} Cannot find the file\n')
     
+    @staticmethod
+    def start_textarea() :
+        print(f'{Fore.GREEN} Type bulk of hostname\n{"="*30}\n')
+
+    @staticmethod
+    def end_textarea() :
+        print(f'{Fore.GREEN}{"="*30}')
+
+    @staticmethod
+    def get_textarea_failed() :
+        print(f'{Fore.RED} Cannot get targets\n')
 
     @staticmethod
     def get_method_to_parse():
         print()
         choices = [
-            'Range', 
-            'Space', 
             'Comma', 
             'File',
-            'Domain'
+            'Range', 
+            'Space', 
+            'Textarea'
         ]
         selector = [
             inquirer.List(
