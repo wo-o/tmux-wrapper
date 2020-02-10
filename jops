@@ -11,7 +11,7 @@ if __name__=="__main__" :
     
     try :
         args = Option.get_args()
-        if args.command == 'tmux': 
+        if (args.command == 'tmux') or (args.command == 't'): 
             TmuxOption.handler(args)
         if args.command == 'ansible': 
             AnsibleOption.handler(args)

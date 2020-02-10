@@ -20,11 +20,10 @@ class Option :
     def tmux_option(cls) :
         tmux_parser = cls.__subparser.add_parser(
             'tmux', help='Using TMUX',
-            # aliases=['t']
+            aliases=['t']
         )
         
         cls.common_option(tmux_parser)
-
         tmux_parser.add_argument (
             '-p', '--proxy', 
             type=str, nargs=1, metavar=('Host'), 
@@ -34,6 +33,11 @@ class Option :
             '-n', '--number', 
             type=int, nargs=1, metavar=('Number'), 
             help='Type number of panes in one window'
+        )
+        tmux_parser.add_argument (
+            '-s', '--secret', 
+            type=str, nargs=1, metavar=('Password'), 
+            help='Type password for access'
         )
 
     @classmethod
@@ -47,15 +51,13 @@ class Option :
     
     @staticmethod
     def common_option(parser) :
+
         parser.add_argument (
             '-t', '--target', 
-            type=str, nargs=1, metavar=('Host'), 
-            help='Type host to connect with tmux ( hostname#s:e )'
-        )
-        parser.add_argument (
-            '-m', '--method', 
-            action="store_true",
-            help='Choose method to parse'
+            type=str, nargs='?', 
+            default=False,
+            metavar=('Target'), 
+            help='Type target to manage( target#s:e )'
         )
         parser.add_argument (
             '-u', '--user', 
@@ -64,7 +66,8 @@ class Option :
         ) 
         parser.add_argument (
             '-x', '--execute', 
-            action="store_true",
+            type=str, nargs='?',
+            metavar=('Command'),
             help='Type command to execute'
         ) 
 

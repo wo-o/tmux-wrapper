@@ -63,7 +63,7 @@ class Target:
             while True:
                 i = (input()).split(' ')[0].strip()
                 if i == '': continue
-                if i == 'done': break
+                if i == '-': break
                 target_list.append(i)
             Dialog.end_textarea()
             return target_list
@@ -71,11 +71,12 @@ class Target:
             Dialog.get_file_failed()
             sys.exit(0)
 
+
     @classmethod
     def select_parse_method(cls):
         try :
             method = Dialog.get_method_to_parse()
-            if method == 'Comma'  : return cls.parse_by_seperator(' ', 'Comma')
+            if method == 'Comma'  : return cls.parse_by_seperator(',', 'Comma')
             if method == 'File'   : return cls.parse_by_file()
             if method == 'Range'  : return cls.parse_by_range()
             if method == 'Space'  : return cls.parse_by_seperator(' ', 'Space')
