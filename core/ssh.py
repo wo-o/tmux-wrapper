@@ -6,7 +6,7 @@ class SSH:
     def __init__(self, args):
         self.command = self.get_command_to_execute(args)
         self.proxy = f' ssh -t {args.proxy} -o StrictHostKeyChecking=no ' if args.proxy else ''
-        self.secret = f' sshpass -p {args.secret} ' if args.secret else ''
+        self.secret = f' sshpass -p {args.secret[0]} ' if args.secret else ''
         self.user = args.user[0] if args.user else 'root'
 
     def get_ssh_command(self, target) :
@@ -19,7 +19,13 @@ class SSH:
         )
 
     def execute_ssh_command(self, target) :
-        Dialog.start_ssh(target)
+        Dialog.decorate_ssh()
+        Dialog.ssh_user_prompt(
+            user=self.user,
+            target=target,
+            command=self.command
+        )
+
         os.system (
             f' {self.proxy} ' +
             f' {self.secret} ' +
@@ -27,7 +33,7 @@ class SSH:
             f' {self.user}@{target} ' +
             f' {self.command} '
         )
-        Dialog.end_ssh()
+        Dialog.decorate_ssh()
 
     @classmethod 
     def get_command_to_execute(cls, args):

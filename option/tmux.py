@@ -29,9 +29,10 @@ class TmuxOption :
                 )
 
         for index, target in enumerate(target_list) :
-            if args.command: ssh.execute_ssh_command(target)
+            if args.execute: ssh.execute_ssh_command(target)
             else: tmux.generate_tmux(target, index)
-        tmux.wrap_up()
+        if not args.execute: tmux.wrap_up()
         
+
 
 

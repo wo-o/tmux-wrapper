@@ -56,13 +56,12 @@ class Dialogue :
     def get_textarea_failed() :
         print(f'{Fore.RED} Cannot get targets\n')
 
+    @staticmethod
+    def ssh_user_prompt(user, target, command): 
+        print(f'{Fore.BLUE}[{user}@{target}]# {command}\n{Fore.RESET}')
 
     @staticmethod
-    def start_ssh(target) :
-        print(f'{Fore.BLUE}\n{"="*100} {Fore.CYAN}{target}\n')
-
-    @staticmethod
-    def end_ssh() :
+    def decorate_ssh():
         print(f'{Fore.BLUE}\n{"="*120}\n')
 
     @staticmethod
