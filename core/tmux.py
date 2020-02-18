@@ -28,6 +28,7 @@ class Tmux:
             os.system(f' tmux select-window -t {self.session_id}:{num} ')
             os.system(f' tmux kill-pane -t {self.session_id}:{num}.0 ')
             os.system(' tmux select-layout tiled ')
+        os.system(f' tmux select-layout tiled ')
         os.system(f' tmux attach-session -t {self.session_id}:0 ')
 
     def generate_tmux(self, target, index):

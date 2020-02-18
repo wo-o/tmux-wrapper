@@ -11,10 +11,13 @@ from common.dialogue import Dialogue as Dialog
 class Target:
     @staticmethod
     def parse_by_default(arg):
-        [prefix, suffix] = arg.split('#')
-        [start, end] = suffix.split(':')
-        length = len(start)
+        try:
+            [prefix, suffix] = arg.split('#')
+            [start, end] = suffix.split(':')
+        except ValueError:
+            return [arg]
 
+        length = len(start)
         target = list()
         for i in range(int(start), int(end)+1) :
             target.append(prefix + str(i).zfill(length))
@@ -23,13 +26,17 @@ class Target:
         
     @staticmethod
     def parse_by_range():
-        target = Dialog.get_target()
+        target = Dialog.get_first_target()
 
-        suffix = re.findall('\d+', target)[-1]
-        prefix = target.split(suffix[0])[0]
+        try:
+            suffix = re.findall('\d+', target)[-1]
+            prefix = target.split(suffix[0])[0]
+        except IndexError:
+            Dialog.fail_to_get_target_number()
+            sys.exit(0)
 
         start = int(suffix)
-        end = Dialog.get_range(int(start))
+        end = Dialog.get_last_target_number(int(start))
 
         target_list = list()
         for i in range (start, end+1):
@@ -39,8 +46,8 @@ class Target:
 
     @staticmethod
     def parse_by_seperator(seperator_symbol, seperator):
-        targets = Dialog.get_targets_for_seperator(seperator)
-        return targets.split(seperator_symbol)
+        target = Dialog.get_target_by_seperator(seperator)
+        return target.split(seperator_symbol)
 
     @classmethod
     def parse_by_file(cls):
@@ -52,34 +59,33 @@ class Target:
             target_list = list(filter(lambda x:x!='',target_list))
             return target_list
         except FileNotFoundError:
-            Dialog.get_file_failed()
+            Dialog.fail_to_get_file_name()
             sys.exit(0)
     
     @classmethod
     def parse_by_textarea(cls):
         Dialog.start_textarea()
-        try:
-            target_list = list()
-            while True:
-                i = (input()).split(' ')[0].strip()
-                if i == '': continue
-                if i == '-': break
-                target_list.append(i)
-            Dialog.end_textarea()
-            return target_list
-        except FileNotFoundError:
-            Dialog.get_file_failed()
-            sys.exit(0)
+        Dialog.print_divider()
+        
+        target_list = list()
+        while True:
+            i = Dialog.get_textarea().split(' ')[0].strip()
+            if i == '': continue
+            if i == '-': break
+            target_list.append(i)
+
+        Dialog.print_divider()
+        return target_list
 
 
     @classmethod
     def select_parse_method(cls):
         try :
             method = Dialog.get_method_to_parse()
-            if method == 'Comma'  : return cls.parse_by_seperator(',', 'Comma')
-            if method == 'File'   : return cls.parse_by_file()
-            if method == 'Range'  : return cls.parse_by_range()
-            if method == 'Space'  : return cls.parse_by_seperator(' ', 'Space')
-            if method == 'Textarea'  : return cls.parse_by_textarea()
+            if 'Comma' in method  : return cls.parse_by_seperator(',', 'Comma')
+            if 'Space' in method: return cls.parse_by_seperator(' ', 'Space')
+            if 'File' in method: return cls.parse_by_file()
+            if 'Range' in method: return cls.parse_by_range()
+            if 'Textarea' in method : return cls.parse_by_textarea()
         except TypeError: sys.exit(0)
 

@@ -3,8 +3,8 @@ from common.dialogue import Dialogue as Dialog
 
 class SSH:
 
-    def __init__(self, args):
-        self.command = self.get_command_to_execute(args)
+    def __init__(self, args, command):
+        self.command = command if command else ''
         self.proxy = f' ssh -t {args.proxy} -o StrictHostKeyChecking=no ' if args.proxy else ''
         self.secret = f' sshpass -p {args.secret[0]} ' if args.secret else ''
         self.user = args.user[0] if args.user else 'root'
@@ -19,13 +19,12 @@ class SSH:
         )
 
     def execute_ssh_command(self, target) :
-        Dialog.decorate_ssh()
-        Dialog.ssh_user_prompt(
+        Dialog.print_divider()
+        Dialog.print_user_prompt(
             user=self.user,
             target=target,
             command=self.command
         )
-
         os.system (
             f' {self.proxy} ' +
             f' {self.secret} ' +
@@ -33,7 +32,7 @@ class SSH:
             f' {self.user}@{target} ' +
             f' {self.command} '
         )
-        Dialog.decorate_ssh()
+        Dialog.print_divider()
 
     @classmethod 
     def get_command_to_execute(cls, args):

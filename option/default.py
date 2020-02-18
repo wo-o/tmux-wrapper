@@ -1,15 +1,16 @@
 import argparse
 import os
 
+from colorama import Fore, Back, Style, init
+init(autoreset=True)
+
+from core.command import Command
 from core.tmux import Tmux
 from core.target import Target
 from core.kerberos import Kerberos
 from core.ssh import SSH
-from core.command import Command
 
-from common.dialogue import Dialogue as Dialog
-
-class TmuxOption :
+class DefaultOption :
 
     @classmethod
     def get_target_list(cls, args) :

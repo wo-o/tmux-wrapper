@@ -4,16 +4,19 @@ import sys
 import argparse
 
 from option.option import Option
-from option.tmux import TmuxOption
 from option.ansible import AnsibleOption
+from option.install import InstallOption
+from option.tmux import TmuxOption
+from option.default import DefaultOption
 
 if __name__=="__main__" :
     
     try :
         args = Option.get_args()
-        if (args.command == 'tmux') or (args.command == 't'): 
-            TmuxOption.handler(args)
-        if args.command == 'ansible': 
+        if (args.command == 'ansible') or (args.command == 'a'): 
             AnsibleOption.handler(args)
+        if (args.command == 'install') or (args.command == 'i'): 
+            InstallOption.handler(args)
+        DefaultOption.handler(args)
 
     except KeyboardInterrupt: sys.exit(0)
